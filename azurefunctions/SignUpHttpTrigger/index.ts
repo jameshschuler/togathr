@@ -13,14 +13,19 @@ function createSupabaseClient (): SupabaseClient {
 }
 
 const httpTrigger: AzureFunction = async function ( context: Context, req: HttpRequest ): Promise<void> {
+    console.log( 'request', req );
+
     const supabase = createSupabaseClient();
 
     const { email, password } = req.body as SignUp;
 
-    let { user, error } = await supabase.auth.signIn( {
+    let { user, error, session, url } = await supabase.auth.signIn( {
         email,
         password
     } );
+
+    console.log( session );
+    console.log( url );
 
     let response;
 
