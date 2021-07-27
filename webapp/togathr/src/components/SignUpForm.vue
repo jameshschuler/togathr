@@ -23,7 +23,7 @@
         <div class="field">
             <label for="password" class="label">Password</label>
             <div class="control has-icons-left has-icons-right">
-                <input class="input is-danger" type="password" id="password" v-model="formData.email" />
+                <input class="input is-danger" type="password" id="password" v-model="formData.password" />
                 <span class="icon is-small is-left">
                     <i class="fas fa-lock"></i>
                 </span>
@@ -38,6 +38,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import { ValidationError } from 'yup';
 import { signupFormValidator, SignUp } from '../models/signup';
 
 export default defineComponent({
@@ -47,11 +48,12 @@ export default defineComponent({
         const formData = ref<SignUp>({ email: '' });
 
         async function onSubmit() {
-            console.log('hello!!');
-            console.log(formData.value as SignUp);
-
-            const result = await signupFormValidator.isValid(formData.value as SignUp);
-            console.log(result);
+            try {
+                const result = await signupFormValidator.validate(formData.value);
+            } catch (err) {
+                const e = err as ValidationError;
+                console.log('err', { ...err });
+            }
         }
 
         return {
