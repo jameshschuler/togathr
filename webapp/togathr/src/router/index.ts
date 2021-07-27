@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import NotFound from "../components/NotFound.vue";
-import SignUp from "../components/SignUp.vue";
+import SignUp from "../views/SignUp.vue";
 
 const routes: Array<RouteRecordRaw> = [ {
     path: "/signup",

@@ -1,17 +1,25 @@
 <template>
-  <router-view></router-view>
+    <navbar />
+    <div class="columns is-gapless">
+        <div class="column">
+            <router-view></router-view>
+        </div>
+    </div>
+    <!-- <bottom-actionbar /> TODO: only displayed when logged in-->
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
+import BottomActionbar from "./components/BottomActionbar.vue";
+import Navbar from "./components/Navbar.vue";
 
 export default defineComponent({
-  name: 'App',
-  components: {
-    
-  }
-})
+    name: "App",
+    components: {
+        BottomActionbar,
+        Navbar,
+    },
+});
 </script>
 
-<style>
-</style>
+<style lang="scss"></style>
