@@ -1,10 +1,12 @@
 <template>
+    <notification :isShowing="validationError !== null" :message="validationError"></notification>
     <form @submit.prevent="onSubmit">
         <div class="field">
             <label for="email" class="label">Email</label>
             <div class="control has-icons-left has-icons-right">
                 <input
-                    class="input is-danger"
+                    class="input"
+                    :class="{ 'is-danger': errors.email }"
                     type="email"
                     placeholder="hello@example.com"
                     id="email"
@@ -13,25 +15,31 @@
                 <span class="icon is-small is-left">
                     <i class="fas fa-envelope"></i>
                 </span>
-                <span class="icon is-small is-right">
+                <span v-if="errors.email" class="icon is-small is-right">
                     <i class="fas fa-exclamation-triangle"></i>
                 </span>
             </div>
-            <p class="help is-danger">This email is invalid</p>
+            <p v-if="errors.email" class="help is-danger">{{ errors.email }}</p>
         </div>
 
         <div class="field">
             <label for="password" class="label">Password</label>
             <div class="control has-icons-left has-icons-right">
-                <input class="input is-danger" type="password" id="password" v-model="formData.password" />
+                <input
+                    class="input"
+                    type="password"
+                    id="password"
+                    v-model="formData.password"
+                    :class="{ 'is-danger': errors.password }"
+                />
                 <span class="icon is-small is-left">
                     <i class="fas fa-lock"></i>
                 </span>
-                <span class="icon is-small is-right">
+                <span v-if="errors.password" class="icon is-small is-right">
                     <i class="fas fa-exclamation-triangle"></i>
                 </span>
             </div>
-            <p class="help is-danger">This password is invalid</p>
+            <p v-if="errors.password" class="help is-danger">{{ errors.password }}</p>
         </div>
         <button :class="{ 'is-loading': loading }" type="submit" class="button is-primary">Sign up</button>
     </form>
@@ -40,26 +48,51 @@
 import { defineComponent, ref } from 'vue';
 import { ValidationError } from 'yup';
 import { signupFormValidator, SignUp } from '../models/signup';
+import { signUpWithEmailPassword } from '../services/accountService';
+import Notification from './Notification.vue';
 
 export default defineComponent({
-    components: {},
+    components: {
+        Notification,
+    },
     setup() {
         const loading = ref(false);
         const formData = ref<SignUp>({ email: '' });
+        const errors = ref({ email: '', password: '' });
+        const validationError = ref<string | null>(null);
 
         async function onSubmit() {
+            loading.value = true;
+
             try {
-                const result = await signupFormValidator.validate(formData.value);
+                const { email, password } = await signupFormValidator.validate(formData.value);
+
+                const error = await signUpWithEmailPassword(email, password);
+                if (error) {
+                    validationError.value = error.message;
+                } else {
+                    // TODO: navigate to login screen? or navigate to "home" page?
+                    // TODO: or if email verification is required, redirect to email confirmation screen?
+                }
+
+                loading.value = false;
             } catch (err) {
-                const e = err as ValidationError;
-                console.log('err', { ...err });
+                const error = err as ValidationError;
+                if (error.path === 'email') {
+                    errors.value.email = error.message;
+                } else if (error.path === 'password') {
+                    errors.value.password = error.message;
+                }
+                loading.value = false;
             }
         }
 
         return {
+            errors,
             formData,
             loading,
             onSubmit,
+            validationError,
         };
     },
 });

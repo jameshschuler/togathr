@@ -7,5 +7,5 @@ export interface SignUp {
 
 export const signupFormValidator = object().shape( {
     email: string().email().required(),
-    password: string(),
+    password: string().required(),
 } );
