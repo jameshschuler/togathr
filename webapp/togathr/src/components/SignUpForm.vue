@@ -63,6 +63,7 @@ export default defineComponent({
         const formData = ref<SignUp>({ email: '' });
         const errors = ref({ email: '', password: '' });
         const validationError = ref<string | null>(null);
+        const router = useRouter();
 
         async function onSubmit() {
             loading.value = true;
@@ -74,7 +75,7 @@ export default defineComponent({
                 if (error) {
                     validationError.value = error.message;
                 } else {
-                    useRouter().push({ name: '/confirmationEmailSent', params: { email } });
+                    router.push({ path: '/confirmationEmailSent', query: { email } });
                 }
 
                 loading.value = false;
