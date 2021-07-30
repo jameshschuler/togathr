@@ -41,7 +41,9 @@
             </div>
             <p v-if="errors.password" class="help is-danger">{{ errors.password }}</p>
         </div>
-        <button :class="{ 'is-loading': loading }" type="submit" class="button is-primary">Sign up</button>
+        <button :class="{ 'is-loading': loading }" type="submit" class="button is-success is-outlined mt-1">
+            Sign up
+        </button>
     </form>
 </template>
 <script lang="ts">

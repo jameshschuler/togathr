@@ -1,33 +1,20 @@
 <template>
-    <nav class="navbar" role="navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="https://bulma.io">
-                <img
-                    src="https://bulma.io/images/bulma-logo.png"
-                    width="112"
-                    height="28"
-                />
-            </a>
-
-            <a
-                role="button"
-                class="navbar-burger"
-                :class="{ 'is-active': isActive }"
-                @click="toggleMobileMenu"
-            >
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
+    <nav class="navbar is-success" role="navigation">
+        <div class="navbar-brand is-align-items-center is-justify-content-space-between">
+            <router-link class="navbar-item is-size-3" to="/">Togathr</router-link>
+            <div class="is-flex is-align-items-center">
+                <router-link class="button is-hidden-desktop" to="">Sign up</router-link>
+                <a role="button" class="navbar-burger" :class="{ 'is-active': isActive }" @click="toggleMobileMenu">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
         </div>
 
-        <div
-            id="navbarBasicExample"
-            class="navbar-menu"
-            :class="{ 'is-active': isActive }"
-        >
+        <div id="navbarBasicExample" class="navbar-menu" :class="{ 'is-active': isActive }">
             <div class="navbar-start">
-                <a class="navbar-item">About</a>
+                <!-- <a class="navbar-item">About</a> -->
                 <!-- <a class="navbar-item">
         Home
       </a>
@@ -40,10 +27,8 @@
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a class="button is-primary">
-                            <strong>Sign up</strong>
-                        </a>
-                        <a class="button is-light"> Log in </a>
+                        <router-link class="button is-light" to="/signup">Sign up</router-link>
+                        <router-link class="button is-light" to="/login">Log in</router-link>
                     </div>
                 </div>
             </div>
@@ -51,7 +36,7 @@
     </nav>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue';
 export default defineComponent({
     data() {
         return {
