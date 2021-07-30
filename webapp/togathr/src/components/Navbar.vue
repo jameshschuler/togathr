@@ -3,7 +3,7 @@
         <div class="navbar-brand is-align-items-center is-justify-content-space-between">
             <router-link class="navbar-item is-size-3" to="/">Togathr</router-link>
             <div class="is-flex is-align-items-center">
-                <router-link class="button is-hidden-desktop" to="">Sign up</router-link>
+                <router-link class="button is-hidden-desktop" to="/signup">Sign up</router-link>
                 <a role="button" class="navbar-burger" :class="{ 'is-active': isActive }" @click="toggleMobileMenu">
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>

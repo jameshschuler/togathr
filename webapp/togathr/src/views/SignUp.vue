@@ -1,9 +1,9 @@
 <template>
-    <section class="section is-small">
+    <section class="section">
         <h1 class="title">Sign up</h1>
         <h2 class="subtitle mt-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do</h2>
     </section>
-    <section class="section is-small">
+    <section class="section">
         <sign-up-form />
     </section>
 </template>

@@ -22,4 +22,12 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+* {
+    box-sizing: border-box;
+}
+.columns,
+.columns:last-child {
+    margin: 0;
+}
+</style>

@@ -48,6 +48,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { ValidationError } from 'yup';
 import { signupFormValidator, SignUp } from '../models/signup';
 import { signUpWithEmailPassword } from '../services/accountService';
@@ -73,8 +74,7 @@ export default defineComponent({
                 if (error) {
                     validationError.value = error.message;
                 } else {
-                    // TODO: navigate to login screen? or navigate to "home" page?
-                    // TODO: or if email verification is required, redirect to email confirmation screen?
+                    useRouter().push({ name: '/confirmationEmailSent', params: { email } });
                 }
 
                 loading.value = false;
