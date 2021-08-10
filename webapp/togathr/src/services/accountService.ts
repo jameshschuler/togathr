@@ -16,3 +16,13 @@ export async function signUpWithEmail ( email: string ) {
     console.log( 'user', user );
     console.log( 'error', error );
 }
+
+export async function loginWithEmailPassword ( email: string, password: string ): Promise<Error | null> {
+    // TODO: change url based on env
+    const { user, error } = await supabase.auth.signIn( { email, password } );
+
+    console.log( 'user', user );
+    console.log( 'error', error );
+
+    return error;
+}

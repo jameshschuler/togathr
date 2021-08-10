@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import NotFound from "../components/NotFound.vue";
 import ConfirmationEmailSent from "../views/ConfirmationEmailSent.vue";
+import Feed from '../views/Feed.vue';
 import Login from "../views/Login.vue";
 import SignUp from "../views/SignUp.vue";
 
@@ -13,6 +14,11 @@ const routes: Array<RouteRecordRaw> = [ {
     path: "/login",
     name: "Login",
     component: Login
+},
+{
+    path: "/feed",
+    name: "Feed",
+    component: Feed
 },
 {
     path: "/confirmationEmailSent",
