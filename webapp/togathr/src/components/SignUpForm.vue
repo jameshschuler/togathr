@@ -1,7 +1,7 @@
 <template>
     <notification :isShowing="validationError !== null" :message="validationError"></notification>
     <form @submit.prevent="onSubmit">
-        <div class="field">
+        <div class="field mb-4">
             <label for="email" class="label">Email</label>
             <div class="control has-icons-left has-icons-right">
                 <input
@@ -22,7 +22,7 @@
             <p v-if="errors.email" class="help is-danger">{{ errors.email }}</p>
         </div>
 
-        <div class="field">
+        <div class="field mb-4">
             <label for="password" class="label">Password</label>
             <div class="control has-icons-left has-icons-right">
                 <input
@@ -41,7 +41,11 @@
             </div>
             <p v-if="errors.password" class="help is-danger">{{ errors.password }}</p>
         </div>
-        <button :class="{ 'is-loading': loading }" type="submit" class="button is-success is-outlined mt-1">
+        <button
+            :class="{ 'is-loading': loading }"
+            type="submit"
+            class="button is-success is-outlined mt-5 is-fullwidth"
+        >
             Sign up
         </button>
     </form>
