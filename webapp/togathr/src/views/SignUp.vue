@@ -1,6 +1,6 @@
 <template>
     <div class="columns">
-        <div class="column is-half is-offset-one-quarter">
+        <div class="column is-half is-offset-one-quarter box">
             <section class="section pb-4">
                 <figure class="image is-3by2 mx-auto mb-4">
                     <img src="../assets/sign_up.svg" alt="" />
