@@ -1,10 +1,6 @@
 <template>
     <navbar />
-    <div class="columns">
-        <div class="column is-10 is-offset-1 is-12-mobile">
-            <router-view></router-view>
-        </div>
-    </div>
+    <router-view></router-view>
     <!-- <bottom-actionbar /> TODO: only displayed when logged in-->
 </template>
 
