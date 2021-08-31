@@ -69,6 +69,10 @@ export default defineComponent({
         const validationError = ref<string | null>(null);
         const router = useRouter();
 
+        if (router.currentRoute.value.query.email) {
+            formData.value.email = router.currentRoute.value.query.email as string;
+        }
+
         async function onSubmit() {
             loading.value = true;
 

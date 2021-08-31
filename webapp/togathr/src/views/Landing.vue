@@ -9,7 +9,7 @@
                         labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
                         laboris nisi ut aliquip ex ea commodo consequat.
                     </h3>
-                    <form class="mt-5">
+                    <form class="mt-5" @submit.prevent="onSubmit">
                         <div class="field is-horizontal">
                             <div class="field-body">
                                 <div class="field">
@@ -18,6 +18,7 @@
                                             class="input is-medium is-hidden-mobile"
                                             type="email"
                                             placeholder="Email"
+                                            v-model="formData.email"
                                         />
                                     </div>
                                 </div>
@@ -35,10 +36,31 @@
         </div>
     </div>
 </template>
-<script>
-import { defineComponent } from 'vue';
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { SignUp } from '../models/signup';
 
-export default defineComponent({});
+export default defineComponent({
+    setup() {
+        const formData = ref<SignUp>({ email: '' });
+        const router = useRouter();
+
+        function onSubmit() {
+            let query = null;
+            if (formData.value.email) {
+                query = { email: formData.value.email };
+            }
+
+            router.push({ path: '/signup', query: query });
+        }
+
+        return {
+            formData,
+            onSubmit,
+        };
+    },
+});
 </script>
 <style lang="scss">
 #landing-page {
