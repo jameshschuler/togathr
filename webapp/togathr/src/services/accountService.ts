@@ -26,3 +26,15 @@ export async function loginWithEmailPassword ( email: string, password: string )
 
     return error;
 }
+
+export async function signOut (): Promise<Error | null> {
+    try {
+        let { error } = await supabase.auth.signOut();
+
+        return error;
+    } catch ( error ) {
+        console.log( error );
+        // TODO: show toaster with error message
+        return error;
+    }
+}

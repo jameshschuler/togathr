@@ -22,7 +22,7 @@ export default defineComponent({
     setup() {
         store.user = supabase.auth.user();
         supabase.auth.onAuthStateChange((_: AuthChangeEvent, session: Session) => {
-            store.user = session.user;
+            store.user = session?.user || null;
         });
     },
 });

@@ -31,15 +31,38 @@
                         <router-link class="button is-info" to="/signup">Sign up</router-link>
                     </div>
                 </div>
-                <div class="navbar-item has-dropdown is-hoverable" v-if="isLoggedIn">
+                <div
+                    class="navbar-item has-dropdown"
+                    :class="{ 'is-active': isDropdownActive }"
+                    v-if="isLoggedIn"
+                    @click="toggleDropdown()"
+                >
                     <a class="navbar-link is-arrowless">
                         <i class="far fa-fw fa-2x fa-user-circle"></i>
                     </a>
 
                     <div class="navbar-dropdown is-right">
-                        <a class="navbar-item">Profile</a>
+                        <div
+                            class="navbar-item is-size-5 is-flex is-justify-content-space-between is-align-items-center"
+                        >
+                            <span>Profile</span>
+                            <span>
+                                <i class="fas fa-fw fa-user-alt"></i>
+                            </span>
+                        </div>
                         <hr class="navbar-divider" />
-                        <div class="navbar-item is-clickable" @click="signout">Sign out</div>
+                        <div
+                            class="
+                                navbar-item
+                                is-clickable is-size-5 is-flex is-justify-content-space-between is-align-items-center
+                            "
+                            @click="signout"
+                        >
+                            <span>Sign out</span>
+                            <span>
+                                <i class="fas fa-fw fa-sign-out-alt"></i>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -47,8 +70,9 @@
     </nav>
 </template>
 <script lang="ts">
-import { defineComponent, ref, watch, watchEffect } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import { signOut } from '../services/accountService';
 import { store } from '../store';
 import { supabase } from '../supabase';
 
@@ -66,35 +90,39 @@ export default defineComponent({
     setup() {
         const router = useRouter();
         const isLoggedIn = ref(false);
+        const isDropdownActive = ref(false);
 
         watch(
             () => store.user,
             (value, prevValue) => {
                 isLoggedIn.value = value !== null;
-                console.log(isLoggedIn);
             }
         );
 
         async function signout() {
-            console.log('signing out');
-            try {
-                let { error } = await supabase.auth.signOut();
-                if (error) {
-                    // TODO: show toaster with error message
-                } else {
-                    router.push({ path: '/login' });
-                }
-            } catch (error) {
-                console.log(error);
+            let error = await signOut();
+            if (error) {
                 // TODO: show toaster with error message
+            } else {
+                router.push({ path: '/login' });
             }
         }
 
+        function toggleDropdown() {
+            isDropdownActive.value = !isDropdownActive.value;
+        }
+
         return {
+            isDropdownActive,
             isLoggedIn,
             signout,
+            toggleDropdown,
         };
     },
 });
 </script>
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.navbar-dropdown {
+    width: 200px;
+}
+</style>

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import NotFound from "../components/NotFound.vue";
+import { store } from '../store';
 import ConfirmationEmailSent from "../views/ConfirmationEmailSent.vue";
 import Feed from '../views/Feed.vue';
 import Landing from '../views/Landing.vue';
@@ -40,6 +41,16 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter( {
     history: createWebHistory(),
     routes
+} );
+
+router.beforeEach( ( to, from, next ) => {
+    if ( to.name === 'Feed' && !store.user ) {
+        next( { name: 'Login' } );
+    } else if ( ( to.name === 'Login' || to.name === 'SignUp' || to.name === 'Landing' ) && store.user ) {
+        next( { name: 'Feed' } );
+    } else {
+        next();
+    }
 } );
 
 export default router;
