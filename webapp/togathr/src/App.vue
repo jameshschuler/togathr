@@ -1,29 +1,45 @@
 <template>
     <navbar />
     <router-view></router-view>
-    <!-- <bottom-actionbar /> TODO: only displayed when logged in-->
+    <side-navigation class="is-hidden-touch" v-if="isLoggedIn" />
+    <bottom-actionbar v-if="isLoggedIn" />
 </template>
 
 <script lang="ts">
 import { store } from './store';
-import { defineComponent } from 'vue';
+import { defineComponent, watch, ref } from 'vue';
 import BottomActionbar from './components/BottomActionbar.vue';
 import Navbar from './components/Navbar.vue';
 import { supabase } from './supabase';
 import { AuthChangeEvent } from '@supabase/gotrue-js';
 import { Session } from '@supabase/supabase-js';
+import SideNavigation from './components/SideNavigation.vue';
 
 export default defineComponent({
     name: 'App',
     components: {
         BottomActionbar,
         Navbar,
+        SideNavigation,
     },
     setup() {
+        const isLoggedIn = ref(false);
+
         store.user = supabase.auth.user();
         supabase.auth.onAuthStateChange((_: AuthChangeEvent, session: Session) => {
             store.user = session?.user || null;
         });
+
+        watch(
+            () => store.user,
+            (value, prevValue) => {
+                isLoggedIn.value = value !== null;
+            }
+        );
+
+        return {
+            isLoggedIn,
+        };
     },
 });
 </script>

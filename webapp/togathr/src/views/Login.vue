@@ -2,7 +2,7 @@
     <div class="columns mt-3 mx-3">
         <div class="column is-half is-offset-one-quarter box">
             <section class="section pb-4">
-                <figure class="image is-3by2 mx-auto mb-4">
+                <figure class="image is-2by1 mx-auto mb-4">
                     <img src="../assets/login.svg" alt="" />
                 </figure>
                 <h1 class="title">Log in</h1>
