@@ -47,7 +47,7 @@ export default defineComponent({
         const router = useRouter();
 
         function onSubmit() {
-            let query = null;
+            let query;
             if (formData.value.email) {
                 query = { email: formData.value.email };
             }

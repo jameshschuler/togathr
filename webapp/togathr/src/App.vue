@@ -26,7 +26,7 @@ export default defineComponent({
         const isLoggedIn = ref(false);
 
         store.user = supabase.auth.user();
-        supabase.auth.onAuthStateChange((_: AuthChangeEvent, session: Session) => {
+        supabase.auth.onAuthStateChange((_: AuthChangeEvent, session: Session | null) => {
             store.user = session?.user || null;
         });
 
