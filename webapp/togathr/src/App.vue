@@ -1,7 +1,9 @@
 <template>
     <navbar />
-    <router-view></router-view>
-    <side-navigation class="is-hidden-touch" v-if="isLoggedIn" />
+    <div class="columns">
+        <side-navigation class="column is-3 is-hidden-touch" v-if="isLoggedIn" />
+        <router-view class="column is-9"></router-view>
+    </div>
     <bottom-actionbar v-if="isLoggedIn" />
 </template>
 
