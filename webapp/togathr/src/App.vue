@@ -2,7 +2,7 @@
     <navbar />
     <div class="columns">
         <side-navigation class="column is-3 is-hidden-touch" v-if="isLoggedIn" />
-        <router-view class="column is-9"></router-view>
+        <router-view class="column is-9" :class="isLoggedIn ? 'is-9' : 'is-12'"></router-view>
     </div>
     <bottom-actionbar v-if="isLoggedIn" />
 </template>

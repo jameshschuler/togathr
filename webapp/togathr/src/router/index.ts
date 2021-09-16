@@ -14,42 +14,63 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/',
         name: 'Landing',
-        component: Landing
+        component: Landing,
+        meta: {
+            requiresAuth: false
+        }
     },
     {
         path: "/signup",
         name: "SignUp",
-        component: SignUp
+        component: SignUp,
+        meta: {
+            requiresAuth: false
+        }
     },
     {
         path: "/login",
         name: "Login",
-        component: Login
+        component: Login,
     },
     {
         path: "/feed",
         name: "Feed",
-        component: Feed
+        component: Feed,
+        meta: {
+            requiresAuth: true
+        }
     },
     {
         path: "/confirmationEmailSent",
         name: "ConfirmationEmailSent",
-        component: ConfirmationEmailSent
+        component: ConfirmationEmailSent,
+        meta: {
+            requiresAuth: false
+        }
     },
     {
         path: "/profile",
         name: "Profile",
-        component: Profile
+        component: Profile,
+        meta: {
+            requiresAuth: true
+        }
     },
     {
         path: "/events",
         name: "Events",
-        component: Events
+        component: Events,
+        meta: {
+            requiresAuth: true
+        }
     },
     {
         path: "/settings",
         name: "Settings",
-        component: Settings
+        component: Settings,
+        meta: {
+            requiresAuth: true
+        }
     },
     {
         path: "/:catchAll(.*)",
@@ -62,11 +83,18 @@ const router = createRouter( {
 } );
 
 router.beforeEach( ( to, from, next ) => {
-    if ( ( to.name === 'Feed' || to.name === 'Profile' ) && !store.user ) {
+    const user = store.user;
+    const requiresAuth = to.matched.some( record => record.meta.requiresAuth );
+
+    if ( requiresAuth && user === null ) {
         next( { name: 'Login' } );
-    } else if ( ( to.name === 'Login' || to.name === 'SignUp' || to.name === 'Landing' ) && store.user ) {
-        next( { name: 'Feed' } );
-    } else {
+    }
+    else {
+        if ( to.name === 'Landing' || to.name === 'Login' || to.name === 'SignUp' ) {
+            next( { name: 'Feed' } );
+            return;
+        }
+
         next();
     }
 } );
