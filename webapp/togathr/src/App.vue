@@ -1,26 +1,31 @@
 <template>
     <navbar />
-    <div class="columns mb-3">
-        <side-navigation class="column is-3 is-hidden-touch" v-if="isLoggedIn" />
-        <router-view class="column" :class="isLoggedIn ? 'is-9' : 'is-12'"></router-view>
-    </div>
+    <main class="container is-fluid px-0">
+        <div class="columns mb-3">
+            <side-navigation class="column is-3 is-hidden-touch" v-if="isLoggedIn" />
+            <router-view class="column" :class="isLoggedIn ? 'is-9' : 'is-12'"></router-view>
+        </div>
+    </main>
     <bottom-actionbar v-if="isLoggedIn" />
+    <app-footer></app-footer>
 </template>
 
 <script lang="ts">
 import { store } from './store';
 import { defineComponent, watch, ref } from 'vue';
+import AppFooter from './components/AppFooter.vue';
 import BottomActionbar from './components/BottomActionbar.vue';
 import Navbar from './components/Navbar.vue';
+import SideNavigation from './components/SideNavigation.vue';
 import { supabase } from './supabase';
 import { AuthChangeEvent } from '@supabase/gotrue-js';
 import { Session } from '@supabase/supabase-js';
-import SideNavigation from './components/SideNavigation.vue';
 
 export default defineComponent({
     name: 'App',
     components: {
         BottomActionbar,
+        AppFooter,
         Navbar,
         SideNavigation,
     },
@@ -50,8 +55,21 @@ export default defineComponent({
 * {
     box-sizing: border-box;
 }
+
 .columns,
 .columns:last-child {
     margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+#app {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 </style>

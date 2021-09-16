@@ -1,5 +1,5 @@
 <template>
-    <div
+    <nav
         class="p-2 has-background-info-light is-flex is-justify-content-space-between is-align-items-center"
         role="navigation"
     >
@@ -11,7 +11,7 @@
                 <router-link class="button is-info" to="/signup" style="color: white !important">Sign up</router-link>
             </div>
         </div>
-    </div>
+    </nav>
 </template>
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
