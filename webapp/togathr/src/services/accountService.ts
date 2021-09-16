@@ -1,21 +1,17 @@
 import { supabase } from '../supabase';
 
 export async function signUpWithEmailPassword ( email: string, password: string ): Promise<Error | null> {
-    // TODO: change url based on env
-    const { user, error } = await supabase.auth.signUp( { email, password }, { redirectTo: 'http://localhost:3000/emailConfirmed' } );
+    let redirectTo = import.meta.env.DEV ? 'http://localhost:3000/emailConfirmed' :
+        'https://www.togathr.app/emailConfirmed'
 
-    console.log( 'user', user );
-    console.log( 'error', error );
+    const { user, error } = await supabase.auth.signUp( { email, password },
+        { redirectTo: redirectTo } );
 
     return error;
 }
 
-export async function loginWithEmailPassword ( email: string, password: string ): Promise<Error | null> {
-    // TODO: change url based on env
+export async function loginWithEmailPassword ( email: string, password: string | undefined ): Promise<Error | null> {
     const { user, error } = await supabase.auth.signIn( { email, password } );
-
-    console.log( 'user', user );
-    console.log( 'error', error );
 
     return error;
 }

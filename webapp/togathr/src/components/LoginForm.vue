@@ -55,7 +55,7 @@ import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { ValidationError } from 'yup';
 import { loginFormValidator, Login } from '../models/login';
-import { loginWithEmailPassword, loginWithMagicEmail } from '../services/accountService';
+import { loginWithEmailPassword } from '../services/accountService';
 import Notification from './Notification.vue';
 
 export default defineComponent({
