@@ -7,5 +7,5 @@ export interface Login {
 
 export const loginFormValidator = object().shape( {
     email: string().email().required(),
-    password: string().required(),
+    password: string(),
 } );

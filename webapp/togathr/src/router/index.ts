@@ -1,31 +1,26 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import NotFound from "../components/NotFound.vue";
+import ConfirmationEmailSent from "../pages/ConfirmationEmailSent.vue";
+import Events from "../pages/Events.vue";
+import Feed from '../pages/Feed.vue';
+import Landing from '../pages/Landing.vue';
+import Login from "../pages/Login.vue";
+import Profile from "../pages/Profile.vue";
+import Settings from "../pages/Settings.vue";
+import SignUp from "../pages/SignUp.vue";
+import VerifyMagicEmailLink from '../pages/VerifyMagicEmailLink.vue';
 import { store } from '../store';
-import ConfirmationEmailSent from "../views/ConfirmationEmailSent.vue";
-import Events from "../views/Events.vue";
-import Feed from '../views/Feed.vue';
-import Landing from '../views/Landing.vue';
-import Login from "../views/Login.vue";
-import Profile from "../views/Profile.vue";
-import Settings from "../views/Settings.vue";
-import SignUp from "../views/SignUp.vue";
 
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/',
         name: 'Landing',
-        component: Landing,
-        meta: {
-            requiresAuth: false
-        }
+        component: Landing
     },
     {
         path: "/signup",
         name: "SignUp",
-        component: SignUp,
-        meta: {
-            requiresAuth: false
-        }
+        component: SignUp
     },
     {
         path: "/login",
@@ -43,10 +38,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/confirmationEmailSent",
         name: "ConfirmationEmailSent",
-        component: ConfirmationEmailSent,
-        meta: {
-            requiresAuth: false
-        }
+        component: ConfirmationEmailSent
     },
     {
         path: "/profile",
@@ -73,6 +65,11 @@ const routes: Array<RouteRecordRaw> = [
         }
     },
     {
+        path: '/verifyMagicEmailLink',
+        name: "VerifyMagicEmailLink",
+        component: VerifyMagicEmailLink,
+    },
+    {
         path: "/:catchAll(.*)",
         component: NotFound,
     } ];
@@ -90,12 +87,11 @@ router.beforeEach( ( to, from, next ) => {
         next( { name: 'Login' } );
     }
     else {
-        if ( to.name === 'Landing' || to.name === 'Login' || to.name === 'SignUp' ) {
+        if ( user && ( to.name === 'Landing' || to.name === 'Login' || to.name === 'SignUp' ) ) {
             next( { name: 'Feed' } );
-            return;
+        } else {
+            next();
         }
-
-        next();
     }
 } );
 

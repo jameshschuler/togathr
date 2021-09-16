@@ -8,7 +8,7 @@
             <nav-dropdown v-if="isLoggedIn" />
             <div class="buttons mr-2" v-if="!isLoggedIn">
                 <router-link class="button is-white" to="/login">Log in</router-link>
-                <router-link class="button is-info" to="/signup">Sign up</router-link>
+                <router-link class="button is-info" to="/signup" style="color: white !important">Sign up</router-link>
             </div>
         </div>
     </div>

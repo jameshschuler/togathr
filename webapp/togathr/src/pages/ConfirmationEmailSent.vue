@@ -1,5 +1,5 @@
 <template>
-    <section class="section">
+    <section class="section mt-6">
         <figure class="image is-128x128 mx-auto">
             <img src="../assets/confirmation_email_sent.svg" alt="" />
         </figure>
@@ -19,7 +19,6 @@ export default defineComponent({
         const email = route.query.email;
 
         if (!email) {
-            // TODO: redirect to login page
             useRouter().push('login');
         }
 

@@ -23,7 +23,7 @@
         </div>
 
         <div class="field mb-4">
-            <label for="password" class="label">Password</label>
+            <label for="password" class="label">Password (Optional)</label>
             <div class="control has-icons-left has-icons-right">
                 <input
                     class="input"
@@ -55,7 +55,7 @@ import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { ValidationError } from 'yup';
 import { loginFormValidator, Login } from '../models/login';
-import { loginWithEmailPassword } from '../services/accountService';
+import { loginWithEmailPassword, loginWithMagicEmail } from '../services/accountService';
 import Notification from './Notification.vue';
 
 export default defineComponent({
@@ -75,21 +75,29 @@ export default defineComponent({
             try {
                 const { email, password } = await loginFormValidator.validate(formData.value);
 
-                const error = await loginWithEmailPassword(email, password);
+                let error = await loginWithEmailPassword(email, password);
+
                 if (error) {
                     validationError.value = error.message;
                 } else {
-                    router.push({ path: '/feed' });
+                    console.log(password);
+                    if (!password || password === '') {
+                        router.push({ path: '/verifyMagicEmailLink' });
+                    } else {
+                        router.push({ path: '/feed' });
+                    }
                 }
 
                 loading.value = false;
             } catch (err) {
                 const error = err as ValidationError;
+
                 if (error.path === 'email') {
                     errors.value.email = error.message;
                 } else if (error.path === 'password') {
                     errors.value.password = error.message;
                 }
+
                 loading.value = false;
             }
         }
