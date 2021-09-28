@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import NotFound from "../components/NotFound.vue";
 import ConfirmationEmailSent from "../pages/ConfirmationEmailSent.vue";
 import Events from "../pages/Events.vue";
+import NewEvent from '../pages/events/NewEvent.vue';
 import Feed from '../pages/Feed.vue';
 import Landing from '../pages/Landing.vue';
 import Login from "../pages/Login.vue";
@@ -52,6 +53,14 @@ const routes: Array<RouteRecordRaw> = [
         path: "/events",
         name: "Events",
         component: Events,
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+        path: "/events/new",
+        name: "NewEvent",
+        component: NewEvent,
         meta: {
             requiresAuth: true
         }
