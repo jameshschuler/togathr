@@ -95,6 +95,8 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { NewEvent } from '../../models/event';
+import { createEvent } from '../../services/eventService';
+import { store } from '../../store';
 
 export default defineComponent({
     setup() {
@@ -104,6 +106,11 @@ export default defineComponent({
         async function onSubmit() {
             console.log('hello');
             console.log(formData.value);
+
+            await createEvent({
+                name: formData.value.name,
+                createdBy: store.user.id,
+            });
         }
 
         return {
