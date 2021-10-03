@@ -80,7 +80,6 @@ export default defineComponent({
                 if (error) {
                     validationError.value = error.message;
                 } else {
-                    console.log(password);
                     if (!password || password === '') {
                         router.push({ path: '/verifyMagicEmailLink' });
                     } else {
