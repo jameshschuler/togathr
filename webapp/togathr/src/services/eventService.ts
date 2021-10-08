@@ -1,5 +1,7 @@
 import { PostgrestError } from '@supabase/postgrest-js';
+import { Event } from '../models/event';
 import { CreateEventRequest } from '../models/request/createEventRequest';
+import { GetEventsResponse } from '../models/response/getEventsResponse';
 import { supabase } from '../supabase';
 
 export interface Response {
@@ -30,6 +32,28 @@ export async function createEvent ( request: CreateEventRequest ): Promise<Respo
 
     return {
         error
+    };
+}
+
+export async function getUpcomingEvents ( createdBy: string ): Promise<GetEventsResponse> {
+    const today = new Date().toISOString().slice( 0, 10 );
+    // const now = new Date().toLocaleTimeString();
+
+    const { data, error } = await supabase.from( 'event' )
+        .select( 'id, name' )
+        .eq( 'created_by', createdBy )
+        .gte( 'start_date', today );
+
+    if ( error ) {
+        return {
+            error,
+            data: []
+        };
+    }
+
+    return {
+        error: null,
+        data: data as Event[]
     };
 }
 

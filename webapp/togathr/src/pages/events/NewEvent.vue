@@ -1,6 +1,6 @@
 <template>
     <div class="mt-3">
-        <notification :isShowing="validationError !== null" :message="validationError"></notification>
+        <notification class="is-danger" :isShowing="validationError !== null" :message="validationError"></notification>
         <h1 class="title">New Event</h1>
         <form @submit.prevent="onSubmit" class="column is-9">
             <div class="field">
@@ -135,7 +135,7 @@ export default defineComponent({
 
                 await newEventFormValidator.validate(formData.value, { abortEarly: false });
 
-                const isUnique = await isEventNameUnique(store.user.id, formData.value.name);
+                const isUnique = await isEventNameUnique(store.user!.id, formData.value.name);
                 if (!isUnique) {
                     loading.value = false;
                     errors.value = {
@@ -145,7 +145,7 @@ export default defineComponent({
                 }
 
                 const response = await createEvent({
-                    createdBy: store.user.id,
+                    createdBy: store.user!.id,
                     description: formData.value.description,
                     endDate: formData.value.endDate,
                     endTime: formData.value.endTime,

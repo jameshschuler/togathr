@@ -1,5 +1,5 @@
 <template>
-    <notification :isShowing="validationError !== null" :message="validationError"></notification>
+    <notification class="is-danger" :isShowing="validationError !== null" :message="validationError"></notification>
     <form @submit.prevent="onSubmit">
         <div class="field mb-4">
             <label for="email" class="label">Email</label>

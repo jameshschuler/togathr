@@ -1,5 +1,10 @@
 import { bool, date, object, ref, string } from 'yup';
 
+export interface Event {
+    id: string;
+    name: string;
+}
+
 export interface NewEvent {
     description?: string;
     endDate: string;

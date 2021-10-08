@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isShowing" class="notification is-danger">
+    <div v-if="isShowing" class="notification" :class="class">
         <button v-if="isDismissable" class="delete"></button>
         {{ message }}
     </div>
@@ -8,7 +8,7 @@
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
-    props: ['message', 'isDismissable', 'isShowing'],
+    props: ['message', 'isDismissable', 'isShowing', 'class'],
     setup(props) {},
 });
 </script>
