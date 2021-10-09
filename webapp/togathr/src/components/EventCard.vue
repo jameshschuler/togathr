@@ -1,5 +1,5 @@
 <template>
-    <div class="column is-4">
+    <div class="column is-one-third-desktop is-full-touch">
         <div class="card">
             <div class="card-image">
                 <figure class="image is-4by3">

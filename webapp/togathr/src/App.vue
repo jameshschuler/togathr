@@ -1,9 +1,9 @@
 <template>
     <navbar />
-    <main class="container is-fluid px-0">
+    <main class="container is-fluid px-0" id="main" :class="isLoggedIn && 'include-bottom-spacing'">
         <div class="columns mb-3">
             <side-navigation class="column is-2 is-hidden-touch" v-if="isLoggedIn" />
-            <router-view class="column" :class="isLoggedIn ? 'is-10' : 'is-12'"></router-view>
+            <router-view class="column is-12-touch" :class="isLoggedIn ? 'is-10-desktop' : 'is-12'"></router-view>
         </div>
     </main>
     <bottom-actionbar v-if="isLoggedIn" />
@@ -52,6 +52,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import 'bulma/sass/utilities/mixins.sass';
+
 * {
     box-sizing: border-box;
 }
@@ -71,6 +73,12 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
+}
+
+.include-bottom-spacing {
+    @include touch {
+        margin-bottom: 5rem;
+    }
 }
 
 .w-50 {

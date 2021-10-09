@@ -6,13 +6,26 @@ export interface Event {
 }
 
 export interface NewEvent {
+    address1?: string;
+    address2?: string;
+    city?: string;
+    country?: string;
     description?: string;
     endDate: string;
     endTime: string;
     isPrivate: boolean;
+    locationName?: string;
     name: string;
     startDate: string;
     startTime: string;
+    state?: string;
+    zip?: string;
+}
+
+export interface NewEventErrors {
+    endDate?: string;
+    name?: string;
+    startDate?: string;
 }
 
 export const newEventFormValidator = object().shape( {

@@ -10,17 +10,27 @@ export interface Response {
 }
 
 export async function createEvent ( request: CreateEventRequest ): Promise<Response> {
-    const { name, createdBy, description, endDate, endTime, isPrivate, startDate, startTime } = request;
+    const {
+        address1, address2, city, country, locationName, name, createdBy,
+        description, endDate, endTime,
+        isPrivate, startDate, startTime, state, zip } = request;
 
     const { data, error } = await supabase.from( 'event' ).insert( {
+        address1,
+        address2,
+        city,
+        country,
         created_by: createdBy,
         description: description,
         end_date: endDate,
         end_time: endTime,
         is_private: isPrivate,
+        location_name: locationName,
         name: name,
         start_date: startDate,
-        start_time: startTime
+        start_time: startTime,
+        state,
+        zip
     } );
 
     if ( !error && data && data[ 0 ] ) {
@@ -32,6 +42,28 @@ export async function createEvent ( request: CreateEventRequest ): Promise<Respo
 
     return {
         error
+    };
+}
+
+export async function getPastEvents ( createdBy: string ): Promise<GetEventsResponse> {
+    const today = new Date().toISOString().slice( 0, 10 );
+    // const now = new Date().toLocaleTimeString();
+
+    const { data, error } = await supabase.from( 'event' )
+        .select( 'id, name' )
+        .eq( 'created_by', createdBy )
+        .lte( 'end_date', today );
+
+    if ( error ) {
+        return {
+            error,
+            data: []
+        };
+    }
+
+    return {
+        error: null,
+        data: data as Event[]
     };
 }
 

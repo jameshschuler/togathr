@@ -11,6 +11,14 @@
                 <p v-if="errors.name" class="help is-danger">{{ errors.name }}</p>
             </div>
 
+            <div class="field">
+                <label class="label">Description</label>
+                <div class="control">
+                    <textarea class="textarea" v-model="formData.description"></textarea>
+                </div>
+            </div>
+
+            <hr />
             <div class="field-body mb-3">
                 <div class="field">
                     <label class="label">Start Date *</label>
@@ -72,13 +80,6 @@
             </div>
 
             <div class="field">
-                <label class="label">Description</label>
-                <div class="control">
-                    <textarea class="textarea" v-model="formData.description"></textarea>
-                </div>
-            </div>
-
-            <div class="field">
                 <label class="label">Private event?</label>
                 <div class="control">
                     <label class="radio">
@@ -92,6 +93,83 @@
                 </div>
             </div>
 
+            <!-- <div class="field">
+                <label class="label">Virtual event?</label>
+                <div class="control">
+                    <label class="radio">
+                        <input type="radio" name="isPrivate" value="true" v-model="formData.isPrivate" />
+                        Yes
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="isPrivate" value="false" v-model="formData.isPrivate" />
+                        No
+                    </label>
+                </div>
+            </div> -->
+
+            <hr />
+
+            <div class="field">
+                <label class="label">Location Name</label>
+                <div class="control">
+                    <input class="input" type="text" placeholder="ex. Pool House" v-model="formData.locationName" />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Address</label>
+                <div class="control">
+                    <input class="input" type="text" placeholder="ex. 123 Happy Lane" v-model="formData.address1" />
+                </div>
+                <div class="control mt-2">
+                    <input class="input" type="text" placeholder="" v-model="formData.address2" />
+                </div>
+            </div>
+
+            <div class="field-body mb-3">
+                <div class="field">
+                    <label class="label">City</label>
+                    <div class="control">
+                        <input class="input" placeholder="ex. Rochester" type="text" v-model="formData.city" />
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">State</label>
+                    <div class="control">
+                        <div class="select is-fullwidth">
+                            <select v-model="formData.state">
+                                <option selected value="">Select State</option>
+                                <option v-for="option in stateOptions" v-bind:value="option.value">
+                                    {{ option.text }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field-body mb-3">
+                <div class="field">
+                    <label class="label">Country</label>
+                    <div class="control">
+                        <div class="select is-fullwidth">
+                            <select v-model="formData.country">
+                                <option selected value="">Select Country</option>
+                                <option v-for="option in countryOptions" v-bind:value="option.value">
+                                    {{ option.text }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Zip</label>
+                    <div class="control">
+                        <input class="input" placeholder="ex. 12345" type="text" v-model="formData.zip" />
+                    </div>
+                </div>
+            </div>
+
             <button :class="{ 'is-loading': loading }" type="submit" class="button is-success is-outlined mt-5">
                 Create Event
             </button>
@@ -100,9 +178,9 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { NewEvent, newEventFormValidator } from '../../models/event';
+import { NewEvent, NewEventErrors, newEventFormValidator } from '../../models/event';
 import { createEvent, isEventNameUnique } from '../../services/eventService';
-import { getSelectTimeOptions } from '../../services/dataService';
+import { getCountryOptions, getSelectTimeOptions, getStateOptions } from '../../services/dataService';
 import { store } from '../../store';
 import { ValidationError } from 'yup';
 import { useRouter } from 'vue-router';
@@ -113,7 +191,7 @@ export default defineComponent({
         Notification,
     },
     setup() {
-        const errors = ref({});
+        const errors = ref<NewEventErrors>({});
         const formData = ref<NewEvent>({
             endDate: new Date().toISOString().slice(0, 10),
             endTime: '12:00 AM',
@@ -121,9 +199,13 @@ export default defineComponent({
             isPrivate: true,
             startDate: new Date().toISOString().slice(0, 10),
             startTime: '12:00 AM',
+            country: 'US',
+            state: 'NY',
         });
         const loading = ref(false);
+        const countryOptions = getCountryOptions();
         const selectTimeOptions = getSelectTimeOptions();
+        const stateOptions = getStateOptions();
         const validationError = ref<string | null>(null);
         const router = useRouter();
 
@@ -153,6 +235,15 @@ export default defineComponent({
                     name: formData.value.name,
                     startDate: formData.value.startDate,
                     startTime: formData.value.startTime,
+
+                    // address information
+                    address1: formData.value.address1,
+                    address2: formData.value.address2,
+                    city: formData.value.city,
+                    country: formData.value.country,
+                    locationName: formData.value.locationName,
+                    state: formData.value.state,
+                    zip: formData.value.zip,
                 });
 
                 if (response.error) {
@@ -167,9 +258,11 @@ export default defineComponent({
 
                 const error = err as ValidationError;
 
-                let errs = {};
+                let errs: { [key: string]: any } = {};
                 error.inner.forEach((e: ValidationError) => {
-                    errs[e.path] = e.message;
+                    if (e.path) {
+                        errs[e.path] = e.message;
+                    }
                 });
 
                 errors.value = errs;
@@ -177,10 +270,12 @@ export default defineComponent({
         }
 
         return {
+            countryOptions,
             errors,
             formData,
             loading,
             selectTimeOptions,
+            stateOptions,
             onSubmit,
             validationError,
         };

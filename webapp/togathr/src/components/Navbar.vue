@@ -1,6 +1,6 @@
 <template>
     <nav
-        class="p-2 has-background-info-light is-flex is-justify-content-space-between is-align-items-center"
+        class="px-2 py-1 has-background-info-light is-flex is-justify-content-space-between is-align-items-center"
         role="navigation"
     >
         <router-link class="navbar-item is-size-3" to="/">Togathr</router-link>
