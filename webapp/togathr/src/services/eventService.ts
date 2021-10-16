@@ -3,6 +3,7 @@ import { Event } from '../models/event';
 import { CreateEventRequest } from '../models/request/createEventRequest';
 import { GetEventsResponse } from '../models/response/getEventsResponse';
 import { supabase } from '../supabase';
+import { convertToCamelCase } from '../utils/convertToCamelCase';
 
 export interface Response {
     error: PostgrestError | null;
@@ -72,7 +73,7 @@ export async function getUpcomingEvents ( createdBy: string ): Promise<GetEvents
     // const now = new Date().toLocaleTimeString();
 
     const { data, error } = await supabase.from( 'event' )
-        .select( 'id, name' )
+        .select( 'id, name, start_time, end_time, start_date, end_date, location_name' )
         .eq( 'created_by', createdBy )
         .gte( 'start_date', today );
 
@@ -83,9 +84,13 @@ export async function getUpcomingEvents ( createdBy: string ): Promise<GetEvents
         };
     }
 
+    const converted = data?.map( ( obj: any ) => {
+        return convertToCamelCase( obj );
+    } ) as Event[];
+
     return {
         error: null,
-        data: data as Event[]
+        data: converted
     };
 }
 

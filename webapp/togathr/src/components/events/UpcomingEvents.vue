@@ -2,7 +2,7 @@
     <div>
         <h1 class="is-size-3 title">Upcoming Events</h1>
         <div class="columns" v-if="!loading && upcomingEvents.length !== 0">
-            <event-card v-for="event in upcomingEvents"></event-card>
+            <event-card v-for="event in upcomingEvents" :event="event"></event-card>
         </div>
         <loading-indicator v-if="loading && upcomingEvents.length === 0" />
         <notification
@@ -34,6 +34,8 @@ export default defineComponent({
         async function loadUpcomingEvents() {
             loading.value = true;
             const response = await getUpcomingEvents(store.user!.id);
+
+            console.log(response.data);
 
             if (response.error) {
                 // Pop a toast or something

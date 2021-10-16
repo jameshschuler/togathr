@@ -39,7 +39,6 @@ export default defineComponent({
                 // Pop a toast or something
             } else {
                 pastEvents.value = response.data;
-                console.log(response.data);
             }
 
             loading.value = false;

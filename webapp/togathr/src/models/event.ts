@@ -2,7 +2,12 @@ import { bool, date, object, ref, string } from 'yup';
 
 export interface Event {
     id: string;
+    endDate: string;
+    endTime: string;
+    locationName?: string;
     name: string;
+    startDate: string;
+    startTime: string;
 }
 
 export interface NewEvent {

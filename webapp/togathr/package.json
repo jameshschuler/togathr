@@ -9,6 +9,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^1.21.0",
     "bulma": "^0.9.3",
+    "change-case": "^4.1.2",
     "vue": "^3.0.5",
     "vue-router": "^4.0.10",
     "yup": "^0.32.9"
