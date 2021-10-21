@@ -2,7 +2,7 @@
     <div class="mt-6">
         <h1 class="is-size-3 title">Past Events</h1>
         <div class="columns is-mobile outer" v-if="!loading && pastEvents.length !== 0">
-            <event-card v-for="event in pastEvents"></event-card>
+            <event-card v-for="event in pastEvents" :event="event"></event-card>
         </div>
         <loading-indicator v-if="loading && pastEvents.length === 0" />
         <notification
@@ -17,7 +17,7 @@ import { defineComponent, ref } from 'vue';
 import { Event } from '../../models/event';
 import { getPastEvents } from '../../services/eventService';
 import { store } from '../../store';
-import EventCard from '../EventCard.vue';
+import EventCard from './EventCard.vue';
 import Notification from '../Notification.vue';
 import LoadingIndicator from '../LoadingIndicator.vue';
 

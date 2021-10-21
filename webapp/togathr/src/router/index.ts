@@ -1,17 +1,17 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import NotFound from "../components/NotFound.vue";
-import ConfirmationEmailSent from "../pages/ConfirmationEmailSent.vue";
-import Events from "../pages/Events.vue";
-import EventDetail from '../pages/events/EventDetail.vue';
-import NewEvent from '../pages/events/NewEvent.vue';
-import Feed from '../pages/Feed.vue';
-import Landing from '../pages/Landing.vue';
-import Login from "../pages/Login.vue";
-import Profile from "../pages/Profile.vue";
-import Settings from "../pages/Settings.vue";
-import SignUp from "../pages/SignUp.vue";
-import VerifyMagicEmailLink from '../pages/VerifyMagicEmailLink.vue';
 import { store } from '../store';
+import ConfirmationEmailSent from "../views/ConfirmationEmailSent.vue";
+import EventDetail from '../views/events/EventDetail.vue';
+import Events from "../views/events/Events.vue";
+import NewEvent from '../views/events/NewEvent.vue';
+import Feed from '../views/Feed.vue';
+import Landing from '../views/Landing.vue';
+import Login from "../views/Login.vue";
+import Profile from "../views/Profile.vue";
+import Settings from "../views/Settings.vue";
+import SignUp from "../views/SignUp.vue";
+import VerifyMagicEmailLink from '../views/VerifyMagicEmailLink.vue';
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -86,6 +86,10 @@ const routes: Array<RouteRecordRaw> = [
         path: '/verifyMagicEmailLink',
         name: "VerifyMagicEmailLink",
         component: VerifyMagicEmailLink,
+    },
+    {
+        path: "/notfound",
+        component: NotFound,
     },
     {
         path: "/:catchAll(.*)",

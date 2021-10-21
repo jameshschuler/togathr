@@ -10,6 +10,26 @@ export interface Event {
     startTime: string;
 }
 
+export interface EventDetail {
+    bannerImageName?: string;
+    address1?: string;
+    address2?: string;
+    city?: string;
+    country?: string;
+    createdBy: string;
+    description?: string;
+    endDate: string;
+    endTime: string;
+    isOwner: boolean;
+    isPrivate: boolean;
+    locationName?: string;
+    name: string;
+    startDate: string;
+    startTime: string;
+    state?: string;
+    zip?: string;
+}
+
 export interface NewEvent {
     address1?: string;
     address2?: string;

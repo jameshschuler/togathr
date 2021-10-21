@@ -17,7 +17,7 @@ import { defineComponent, ref } from 'vue';
 import { Event } from '../../models/event';
 import { getUpcomingEvents } from '../../services/eventService';
 import { store } from '../../store';
-import EventCard from '../../components/EventCard.vue';
+import EventCard from './EventCard.vue';
 import Notification from '../../components/Notification.vue';
 import LoadingIndicator from '../../components/LoadingIndicator.vue';
 
@@ -34,8 +34,6 @@ export default defineComponent({
         async function loadUpcomingEvents() {
             loading.value = true;
             const response = await getUpcomingEvents(store.user!.id);
-
-            console.log(response.data);
 
             if (response.error) {
                 // Pop a toast or something

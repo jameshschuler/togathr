@@ -28,8 +28,8 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import PastEvents from '../components/events/PastEvents.vue';
-import UpcomingEvents from '../components/events/UpcomingEvents.vue';
+import PastEvents from '../../components/events/PastEvents.vue';
+import UpcomingEvents from '../../components/events/UpcomingEvents.vue';
 
 export default defineComponent({
     components: {
