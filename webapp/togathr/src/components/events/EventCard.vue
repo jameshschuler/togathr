@@ -23,12 +23,11 @@
                     </div>
                     <div>
                         <h5 class="subtitle is-size-4 has-text-white has-text-weight-bold mt-3 mb-0">
-                            {{ new Date(event.startDate).toLocaleDateString(undefined, options) }} -
-                            {{ event.startTime }}
+                            {{ event.startDate }} - {{ event.startTime }}
                         </h5>
                         <h5 class="subtitle is-size-4 has-text-white has-text-weight-bold my-1">to</h5>
                         <h5 class="subtitle is-size-4 has-text-white has-text-weight-bold my-0">
-                            {{ new Date(event.endDate).toLocaleDateString(undefined, options) }} - {{ event.endTime }}
+                            {{ event.endDate }} - {{ event.endTime }}
                         </h5>
                     </div>
                 </div>
@@ -44,6 +43,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { Event } from '../../models/event';
+import { formatDate, formatTime } from '../../utils/formatter';
 
 export default defineComponent({
     props: {
@@ -57,30 +57,13 @@ export default defineComponent({
             day: 'numeric',
         });
 
-        const timeOptions = ref<Intl.DateTimeFormatOptions>({
-            timeZone: 'UTC',
-            hour12: true,
-            hour: 'numeric',
-            minute: 'numeric',
-        });
-
-        // TODO: move this to the service? yes! will need this elsewhere!
         if (props.event) {
-            const startTime = props.event.startTime;
-            const startTimeSubstring = props.event.startTime.substring(0, startTime.length - 3);
-            const formattedStartTime = new Date('1970-01-01T' + startTimeSubstring + 'Z').toLocaleTimeString(
-                'en-US',
-                timeOptions.value
-            );
-            props.event.startTime = formattedStartTime;
+            const { event } = props;
 
-            const endTime = props.event.endTime;
-            const endTimeSubstring = props.event.endTime.substring(0, endTime.length - 3);
-            const formattedEndTime = new Date('1970-01-01T' + endTimeSubstring + 'Z').toLocaleTimeString(
-                'en-US',
-                timeOptions.value
-            );
-            props.event.endTime = formattedEndTime;
+            event.startTime = formatTime(event.startTime);
+            event.endTime = formatTime(event.endTime);
+            event.endDate = formatDate(event.endDate);
+            event.startDate = formatDate(event.startDate);
         }
 
         return {

@@ -16,7 +16,8 @@
         <div class="content mt-4">
             <p>{{ eventDetail.description }}</p>
             <p><b>Where</b> {{ where }}</p>
-            <p><b>When</b> {{ when }}</p>
+            <p><b>Start</b> {{ eventDetail.startDate }} @ {{ eventDetail.startTime }}</p>
+            <p><b>End</b> {{ eventDetail.endDate }} @ {{ eventDetail.endTime }}</p>
         </div>
         <hr />
         <h3 class="subtitle is-3">Recent Posts</h3>
@@ -30,6 +31,7 @@ import LoadingIndicator from '../../components/LoadingIndicator.vue';
 import { EventDetail } from '../../models/event';
 import { getEventDetail } from '../../services/eventService';
 import { store } from '../../store';
+import { formatDate, formatTime } from '../../utils/formatter';
 
 export default defineComponent({
     components: {
@@ -42,7 +44,6 @@ export default defineComponent({
 
         const eventDetail = ref<EventDetail>();
         const loading = ref<boolean>(true); // TODO: show spinner
-        const when = ref<string>('');
         const where = ref<string>('');
 
         async function loadEventDetail(eventId: number, currentUserId: string) {
@@ -56,8 +57,12 @@ export default defineComponent({
             } else {
                 eventDetail.value = data;
 
-                const { locationName, startDate, startTime } = eventDetail.value!;
-                when.value = `${startDate} @ ${startTime}`;
+                let { locationName, endDate, endTime, startDate, startTime } = eventDetail.value!;
+
+                eventDetail.value.endDate = formatDate(endDate);
+                eventDetail.value.endTime = formatTime(endTime);
+                eventDetail.value.startDate = formatDate(startDate);
+                eventDetail.value.startTime = formatTime(startTime);
 
                 where.value = `${locationName}`;
             }
@@ -70,7 +75,6 @@ export default defineComponent({
         return {
             eventDetail,
             loading,
-            when,
             where,
         };
     },
