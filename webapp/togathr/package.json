@@ -15,7 +15,8 @@
     "yup": "^0.32.9"
   },
   "devDependencies": {
-    "@types/node": "^16.4.2",
+    "@babel/types": "^7.15.6",
+    "@types/node": "^16.11.6",
     "@vitejs/plugin-vue": "^1.2.5",
     "@vue/compiler-sfc": "^3.0.5",
     "eslint": "^7.31.0",

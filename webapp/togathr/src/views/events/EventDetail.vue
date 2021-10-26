@@ -15,12 +15,14 @@
         </div>
         <div class="content mt-4">
             <p>{{ eventDetail.description }}</p>
-            <p><b>Where</b> {{ where }}</p>
+            <p><b>Where</b> {{ eventDetail.locationName }}</p>
+            <p>{{ eventDetail.address1 }} {{ eventDetail.address2 }}</p>
+            <p>{{ eventDetail.city }}, {{ eventDetail.state }} {{ eventDetail.zip }}</p>
             <p><b>Start</b> {{ eventDetail.startDate }} @ {{ eventDetail.startTime }}</p>
             <p><b>End</b> {{ eventDetail.endDate }} @ {{ eventDetail.endTime }}</p>
         </div>
         <hr />
-        <h3 class="subtitle is-3">Recent Posts</h3>
+        <recent-posts />
     </div>
 </template>
 <script lang="ts">
@@ -28,6 +30,7 @@ import { defineComponent, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import BannerImage from '../../components/events/detail/BannerImage.vue';
 import LoadingIndicator from '../../components/LoadingIndicator.vue';
+import RecentPosts from '../../components/posts/RecentPosts.vue';
 import { EventDetail } from '../../models/event';
 import { getEventDetail } from '../../services/eventService';
 import { store } from '../../store';
@@ -37,14 +40,14 @@ export default defineComponent({
     components: {
         BannerImage,
         LoadingIndicator,
+        RecentPosts,
     },
     setup() {
         const route = useRoute();
         const router = useRouter();
 
         const eventDetail = ref<EventDetail>();
-        const loading = ref<boolean>(true); // TODO: show spinner
-        const where = ref<string>('');
+        const loading = ref<boolean>(true);
 
         async function loadEventDetail(eventId: number, currentUserId: string) {
             const { data, error } = await getEventDetail(eventId, currentUserId);
@@ -57,14 +60,17 @@ export default defineComponent({
             } else {
                 eventDetail.value = data;
 
-                let { locationName, endDate, endTime, startDate, startTime } = eventDetail.value!;
+                if (!eventDetail.value) {
+                    router.push({ path: '/notfound' });
+                    return;
+                }
+
+                let { endDate, endTime, startDate, startTime } = eventDetail.value;
 
                 eventDetail.value.endDate = formatDate(endDate);
                 eventDetail.value.endTime = formatTime(endTime);
                 eventDetail.value.startDate = formatDate(startDate);
                 eventDetail.value.startTime = formatTime(startTime);
-
-                where.value = `${locationName}`;
             }
 
             loading.value = false;
@@ -75,7 +81,6 @@ export default defineComponent({
         return {
             eventDetail,
             loading,
-            where,
         };
     },
 });
