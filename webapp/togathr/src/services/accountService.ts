@@ -10,6 +10,14 @@ export async function signUpWithEmailPassword ( email: string, password: string 
     return error;
 }
 
+export async function signInWithGoogle (): Promise<Error | null> {
+    const { user, session, error } = await supabase.auth.signIn( {
+        provider: 'google'
+    } );
+
+    return error;
+}
+
 export async function loginWithEmailPassword ( email: string, password: string | undefined ): Promise<Error | null> {
     const { user, error } = await supabase.auth.signIn( { email, password } );
 

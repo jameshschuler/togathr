@@ -11,7 +11,7 @@
             <section class="section pt-4">
                 <div class="field is-grouped" id="alt-log-in-options">
                     <p class="control">
-                        <button class="button">
+                        <button class="button" @click="signUpWithGoogle">
                             <span class="icon">
                                 <img
                                     class="google-icon"
@@ -41,10 +41,24 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import LoginForm from '../components/LoginForm.vue';
+import { signInWithGoogle } from '../services/accountService';
 
 export default defineComponent({
     components: {
         LoginForm,
+    },
+    setup() {
+        async function signUpWithGoogle() {
+            const error = await signInWithGoogle();
+
+            if (error) {
+                // TODO: do something
+            }
+        }
+
+        return {
+            signUpWithGoogle,
+        };
     },
 });
 </script>
