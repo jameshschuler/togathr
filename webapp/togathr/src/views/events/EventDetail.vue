@@ -23,6 +23,7 @@
         </div>
         <hr />
         <recent-posts />
+        <new-post />
     </div>
 </template>
 <script lang="ts">
@@ -35,12 +36,14 @@ import { EventDetail } from '../../models/event';
 import { getEventDetail } from '../../services/eventService';
 import { store } from '../../store';
 import { formatDate, formatTime } from '../../utils/formatter';
+import NewPost from '../../components/posts/NewPost.vue';
 
 export default defineComponent({
     components: {
         BannerImage,
         LoadingIndicator,
         RecentPosts,
+        NewPost,
     },
     setup() {
         const route = useRoute();

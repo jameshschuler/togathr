@@ -6,18 +6,25 @@
             :isShowing="posts.length === 0"
             message="No posts have been made on this event yet."
         />
-        <new-post />
     </div>
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { getTopLevelPosts } from '../../services/postService';
 import Notification from '../Notification.vue';
-import NewPost from './NewPost.vue';
 
 export default defineComponent({
-    components: { Notification, NewPost },
+    components: { Notification },
     setup() {
         const posts = ref([]);
+        const route = useRoute();
+
+        async function loadPosts(eventId: number) {
+            await getTopLevelPosts(eventId);
+        }
+
+        loadPosts(Number(route.params.id));
 
         return {
             posts,

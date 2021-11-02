@@ -2,9 +2,11 @@ import { User } from '@supabase/supabase-js';
 import { reactive } from "vue";
 
 interface Store {
-    user: User | null
+    user: User | null,
+    currentEvent: any,
 }
 
 export const store = reactive( {
-    user: {}
+    user: {},
+    currentEvent: {}
 } as Store );

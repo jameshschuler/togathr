@@ -1,17 +1,12 @@
-import { PostgrestError } from '@supabase/postgrest-js';
 import { Event, EventDetail } from '../models/event';
 import { CreateEventRequest } from '../models/request/createEventRequest';
+import { APIResponse } from '../models/response/apiResponse';
 import { EventDetailResponse } from '../models/response/eventDetailResponse';
 import { GetEventsResponse } from '../models/response/getEventsResponse';
 import { supabase } from '../supabase';
 import { convertToCamelCase } from '../utils/convertToCamelCase';
 
-export interface Response {
-    error: PostgrestError | null;
-    createdObjectId?: number;
-}
-
-export async function createEvent ( request: CreateEventRequest ): Promise<Response> {
+export async function createEvent ( request: CreateEventRequest ): Promise<APIResponse> {
     const {
         address1, address2, city, country, locationName, name, createdBy,
         description, endDate, endTime,
