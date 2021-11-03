@@ -20,6 +20,8 @@ import SideNavigation from './components/SideNavigation.vue';
 import { supabase } from './supabase';
 import { AuthChangeEvent } from '@supabase/gotrue-js';
 import { Session } from '@supabase/supabase-js';
+import { SessionUser } from './models/response/supabase';
+import { updateProfile } from './services/profileService';
 
 export default defineComponent({
     name: 'App',
@@ -33,7 +35,26 @@ export default defineComponent({
         const isLoggedIn = ref(false);
 
         store.user = supabase.auth.user();
-        supabase.auth.onAuthStateChange((_: AuthChangeEvent, session: Session | null) => {
+        supabase.auth.onAuthStateChange(async (_: AuthChangeEvent, session: Session | null) => {
+            const user = session.user as SessionUser;
+            if (user && user.identities) {
+                const identity = user.identities.find((e) => e.provider === 'google');
+
+                if (identity) {
+                    const { avatar_url, full_name, picture } = identity.identity_data;
+                    const [firstName, lastName] = full_name.split(' ');
+
+                    const response = await updateProfile({
+                        avatarUrl: avatar_url,
+                        firstName: firstName,
+                        fullName: full_name,
+                        lastName: lastName,
+                        picture: picture,
+                        userId: session.user.id,
+                    });
+                }
+            }
+
             store.user = session?.user || null;
         });
 

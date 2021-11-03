@@ -1,9 +1,9 @@
 <template>
-    <form @submit.prevent="onSubmit" class="mt-3">
+    <form @submit.prevent="onSubmit" class="mt-5">
         <div class="field">
-            <label class="label">Body *</label>
+            <label class="label">Message *</label>
             <div class="control">
-                <textarea class="textarea" v-model="formData.content"></textarea>
+                <textarea class="textarea" v-model="formData.content" placeholder="Add a Post"></textarea>
             </div>
             <p v-if="errors.content" class="help is-danger">{{ errors.content }}</p>
         </div>
@@ -35,10 +35,12 @@ export default defineComponent({
             try {
                 await newPostFormValidator.validate(formData.value, { abortEarly: false });
 
+                const profileId = 1; // TODO: get this value from store
                 const response = await createPost({
                     content: formData.value.content,
                     createdBy: store.user.id,
                     eventId: Number(route.params.id),
+                    profileId,
                 });
 
                 if (response.error) {

@@ -7,3 +7,13 @@ export function convertToCamelCase ( object: any ): any {
 
     return convertedObject;
 }
+
+export function convertToCamelCaseArray ( objects: Array<any> | null ): Array<any> {
+    if ( !objects ) return [];
+
+    const convertedObjects = objects.map( ( obj: any ) => {
+        return convertToCamelCase( obj );
+    } );
+
+    return convertedObjects;
+}
