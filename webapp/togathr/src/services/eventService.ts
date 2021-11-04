@@ -32,7 +32,7 @@ export async function createEvent ( request: CreateEventRequest ): Promise<APIRe
 
     if ( !error && data && data[ 0 ] ) {
         return {
-            createdObjectId: data[ 0 ].id,
+            objectId: data[ 0 ].id,
             error: null
         };
     }

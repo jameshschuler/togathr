@@ -36,7 +36,7 @@ export default defineComponent({
 
         store.user = supabase.auth.user();
         supabase.auth.onAuthStateChange(async (_: AuthChangeEvent, session: Session | null) => {
-            const user = session.user as SessionUser;
+            const user = session?.user as SessionUser;
             if (user && user.identities) {
                 const identity = user.identities.find((e) => e.provider === 'google');
 
@@ -50,9 +50,12 @@ export default defineComponent({
                         fullName: full_name,
                         lastName: lastName,
                         picture: picture,
-                        userId: session.user.id,
+                        userId: session!.user!.id,
                     });
                 }
+            } else {
+                // TODO: should still create row in profile table
+                // TODO: add default avatar image to storage and use that for avatar_url
             }
 
             store.user = session?.user || null;

@@ -38,7 +38,7 @@ export default defineComponent({
                 const profileId = 1; // TODO: get this value from store
                 const response = await createPost({
                     content: formData.value.content,
-                    createdBy: store.user.id,
+                    createdBy: store.user!.id,
                     eventId: Number(route.params.id),
                     profileId,
                 });

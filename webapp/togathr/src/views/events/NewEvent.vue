@@ -248,8 +248,8 @@ export default defineComponent({
 
                 if (response.error) {
                     validationError.value = response.error.message;
-                } else if (response.createdObjectId) {
-                    router.push({ name: 'EventDetail', params: { id: response.createdObjectId } });
+                } else if (response.objectId) {
+                    router.push({ name: 'EventDetail', params: { id: response.objectId } });
                 }
 
                 loading.value = false;
