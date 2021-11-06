@@ -102,14 +102,13 @@ const router = createRouter( {
 } );
 
 router.beforeEach( ( to, from, next ) => {
-    const user = store.user;
     const requiresAuth = to.matched.some( record => record.meta.requiresAuth );
-
-    if ( requiresAuth && user === null ) {
+    if ( requiresAuth && store.user?.id === undefined ) {
         next( { name: 'Login' } );
     }
     else {
-        if ( user && ( to.name === 'Landing' || to.name === 'Login' || to.name === 'SignUp' ) ) {
+        // TODO: after logging in, the route is being updated before the store user is set
+        if ( store.user?.id && ( to.name === 'Landing' || to.name === 'Login' || to.name === 'SignUp' ) ) {
             next( { name: 'Feed' } );
         } else {
             next();

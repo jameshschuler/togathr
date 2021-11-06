@@ -1,19 +1,36 @@
 <template>
     <form @submit.prevent="onSubmit" class="mt-5">
-        <div class="field">
-            <label class="label">Message *</label>
-            <div class="control">
-                <textarea class="textarea" v-model="formData.content" placeholder="Add a Post"></textarea>
+        <article class="media">
+            <figure class="media-left">
+                <p class="image is-64x64">
+                    <img class="is-rounded" :src="avatarUrl" />
+                </p>
+            </figure>
+            <div class="media-content">
+                <div class="field">
+                    <div class="control">
+                        <textarea class="textarea" v-model="formData.content" placeholder="Add a Post"></textarea>
+                    </div>
+                    <p v-if="errors.content" class="help is-danger">{{ errors.content }}</p>
+                </div>
+                <nav class="level">
+                    <div class="level-left">
+                        <div class="level-item">
+                            <button
+                                :class="{ 'is-loading': loading }"
+                                type="submit"
+                                class="button is-success is-outlined"
+                            >
+                                Create Post
+                            </button>
+                        </div>
+                    </div>
+                </nav>
             </div>
-            <p v-if="errors.content" class="help is-danger">{{ errors.content }}</p>
-        </div>
-        <button :class="{ 'is-loading': loading }" type="submit" class="button is-success is-outlined mt-5">
-            Create Post
-        </button>
+        </article>
     </form>
 </template>
 <script lang="ts">
-import { log } from 'util';
 import { defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { NewPost, NewPostErrors } from '../../models/formModels/post';
@@ -35,19 +52,31 @@ export default defineComponent({
             try {
                 await newPostFormValidator.validate(formData.value, { abortEarly: false });
 
-                const profileId = 1; // TODO: get this value from store
                 const response = await createPost({
                     content: formData.value.content,
                     createdBy: store.user!.id,
                     eventId: Number(route.params.id),
-                    profileId,
+                    profileId: store.profile!.id,
                 });
 
                 if (response.error) {
                     // TODO: show toaster
                 } else {
-                    console.log('need to get posts or append to posts array');
-                    // TODO: update state
+                    const { content, id, createdAt, createdBy, profileId } = response.payload;
+                    const { avatarUrl, fullName } = store.profile!;
+                    store.currentEvent!.posts!.unshift({
+                        content,
+                        id,
+                        createdAt,
+                        createdBy,
+                        profiles: {
+                            id: profileId,
+                            avatar_url: avatarUrl, // TODO: should be avatarUrl
+                            full_name: fullName ?? '', // TODO: should be fullName
+                        },
+                    });
+
+                    formData.value.content = '';
                 }
 
                 loading.value = false;
@@ -58,6 +87,7 @@ export default defineComponent({
         }
 
         return {
+            avatarUrl: store.profile!.avatarUrl,
             errors,
             formData,
             loading,

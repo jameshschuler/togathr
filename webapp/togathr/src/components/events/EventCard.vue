@@ -43,6 +43,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { Event } from '../../models/event';
+import { store } from '../../store';
 import { formatDate, formatTime } from '../../utils/formatter';
 
 export default defineComponent({

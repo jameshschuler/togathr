@@ -11,7 +11,7 @@
             <section class="section pt-4">
                 <div class="field is-grouped" id="alt-sign-up-options">
                     <p class="control">
-                        <button class="button" @click="signUpWithGoogle">
+                        <button class="button" @click="handleSignUpWithGoogle">
                             <span class="icon">
                                 <img
                                     class="google-icon"
@@ -49,16 +49,12 @@ export default defineComponent({
         SignUpForm,
     },
     setup() {
-        async function signUpWithGoogle() {
-            const error = await signInWithGoogle();
-
-            if (error) {
-                // TODO: do something
-            }
+        async function handleSignUpWithGoogle() {
+            await signInWithGoogle();
         }
 
         return {
-            signUpWithGoogle,
+            handleSignUpWithGoogle,
         };
     },
 });

@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { store } from './store';
-import { defineComponent, watch, ref } from 'vue';
+import { defineComponent, watch, ref, onMounted } from 'vue';
 import AppFooter from './components/AppFooter.vue';
 import BottomActionbar from './components/BottomActionbar.vue';
 import Navbar from './components/Navbar.vue';
@@ -20,8 +20,9 @@ import SideNavigation from './components/SideNavigation.vue';
 import { supabase } from './supabase';
 import { AuthChangeEvent } from '@supabase/gotrue-js';
 import { Session } from '@supabase/supabase-js';
-import { SessionUser } from './models/response/supabase';
-import { updateProfile } from './services/profileService';
+import { AppUser } from './models/response/supabase';
+import { getProfile, updateProfile } from './services/profileService';
+import { isNullOrUndefined } from './utils/common';
 
 export default defineComponent({
     name: 'App',
@@ -34,37 +35,35 @@ export default defineComponent({
     setup() {
         const isLoggedIn = ref(false);
 
-        store.user = supabase.auth.user();
-        supabase.auth.onAuthStateChange(async (_: AuthChangeEvent, session: Session | null) => {
-            const user = session?.user as SessionUser;
-            if (user && user.identities) {
-                const identity = user.identities.find((e) => e.provider === 'google');
-
-                if (identity) {
-                    const { avatar_url, full_name, picture } = identity.identity_data;
-                    const [firstName, lastName] = full_name.split(' ');
-
-                    const response = await updateProfile({
-                        avatarUrl: avatar_url,
-                        firstName: firstName,
-                        fullName: full_name,
-                        lastName: lastName,
-                        picture: picture,
-                        userId: session!.user!.id,
-                    });
-                }
+        // TODO: maybe move this to before the comp is mounted?
+        onMounted(() => {
+            const user = supabase.auth.user();
+            if (user) {
+                store.user = {
+                    ...user,
+                };
             } else {
-                // TODO: should still create row in profile table
-                // TODO: add default avatar image to storage and use that for avatar_url
+                store.user = null;
             }
+        });
 
-            store.user = session?.user || null;
+        // TODO: need to make sure a profile is loaded before rendering certain routes
+        supabase.auth.onAuthStateChange(async (_: AuthChangeEvent, session: Session | null) => {
+            const user = session?.user as AppUser;
+            if (user) {
+                const response = await getProfile(user.id);
+
+                store.profile = response.payload ?? null;
+                store.user = user;
+            } else {
+                store.user = null;
+            }
         });
 
         watch(
             () => store.user,
             (value, prevValue) => {
-                isLoggedIn.value = value !== null;
+                isLoggedIn.value = !isNullOrUndefined(value);
             }
         );
 

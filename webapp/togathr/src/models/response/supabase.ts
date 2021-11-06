@@ -1,7 +1,7 @@
 import { User } from '@supabase/supabase-js';
 
-export interface SessionUser extends User {
-    identities: Array<Identity>;
+export interface AppUser extends User {
+    identities?: Array<Identity>;
 }
 
 export interface Identity {

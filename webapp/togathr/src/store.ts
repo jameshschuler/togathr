@@ -1,12 +1,16 @@
-import { User } from '@supabase/supabase-js';
 import { reactive } from "vue";
+import { AppUser } from './models/response/supabase';
+import { CurrentEvent } from './models/state/currentEvent';
+import { Profile } from './models/state/profile';
 
 interface Store {
-    user: User | null,
-    currentEvent: any,
+    user: AppUser | null,
+    currentEvent: CurrentEvent | null,
+    profile: Profile | null;
 }
 
 export const store = reactive( {
-    user: {},
-    currentEvent: {}
+    user: null,
+    currentEvent: null,
+    profile: null
 } as Store );

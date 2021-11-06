@@ -1,6 +1,6 @@
 <template>
     <loading-indicator v-if="loading" icon-size="fa-3x" />
-    <div class="pr-5" v-if="eventDetail && !loading">
+    <div class="column is-10 pr-5" v-if="eventDetail && !loading">
         <banner-image :imageName="eventDetail.bannerImageName" />
         <div class="is-flex is-justify-content-space-between is-align-items-center">
             <h1 class="title is-1 mb-0">{{ eventDetail.name }}</h1>
@@ -15,8 +15,8 @@
         </div>
         <div class="content mt-4">
             <p>{{ eventDetail.description }}</p>
-            <p><b>Where</b> {{ eventDetail.locationName }}</p>
-            <p>{{ eventDetail.address1 }} {{ eventDetail.address2 }}</p>
+            <p><b>Where</b></p>
+            <p>{{ eventDetail.locationName }} - {{ eventDetail.address1 }} {{ eventDetail.address2 }}</p>
             <p>{{ eventDetail.city }}, {{ eventDetail.state }} {{ eventDetail.zip }}</p>
             <p><b>Start</b> {{ eventDetail.startDate }} @ {{ eventDetail.startTime }}</p>
             <p><b>End</b> {{ eventDetail.endDate }} @ {{ eventDetail.endTime }}</p>
@@ -59,6 +59,7 @@ export default defineComponent({
                 // TODO: show error and redirect to 404 page?
                 // either event doesn't exist or they don't have access to event
                 console.log('redirecting to 404 page');
+                store.currentEvent = null;
                 router.push({ path: '/notfound' });
             } else {
                 eventDetail.value = data;
@@ -74,6 +75,11 @@ export default defineComponent({
                 eventDetail.value.endTime = formatTime(endTime);
                 eventDetail.value.startDate = formatDate(startDate);
                 eventDetail.value.startTime = formatTime(startTime);
+
+                store.currentEvent = {
+                    eventId,
+                    posts: [],
+                };
             }
 
             loading.value = false;

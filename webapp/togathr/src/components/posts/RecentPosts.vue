@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="mb-6">
         <h3 class="subtitle is-3">Recent Posts</h3>
         <div class="posts">
             <post v-for="post in posts" :post="post" />
@@ -17,12 +17,13 @@ import { useRoute } from 'vue-router';
 import { getTopLevelPosts } from '../../services/postService';
 import Notification from '../Notification.vue';
 import Post from './Post.vue';
-import { RecentPost } from '../../models/state/recentPost';
+import { Post as EventPost } from '../../models/state/post';
+import { store } from '../../store';
 
 export default defineComponent({
     components: { Notification, Post },
     setup() {
-        const posts = ref<RecentPost[]>([]);
+        const posts = ref<EventPost[]>([]);
         const route = useRoute();
 
         async function loadPosts(eventId: number) {
@@ -31,7 +32,10 @@ export default defineComponent({
             if (response.error) {
                 console.log(response.error);
             } else {
-                posts.value = response.payload;
+                if (store.currentEvent?.posts) {
+                    store.currentEvent.posts = response.payload;
+                }
+                posts.value = store.currentEvent?.posts ?? [];
             }
         }
 

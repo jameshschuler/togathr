@@ -1,3 +1,7 @@
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend( relativeTime );
+
 export function formatDate ( dateValue: string ): string {
     return new Date( dateValue ).toLocaleDateString( undefined, formatDateOptions );
 }
@@ -9,6 +13,18 @@ export function formatTime ( timeValue: string ): string {
         formatTimeOptions
     );
     return formattedTime;
+}
+
+export function formatDateAndTime ( value: string ): string {
+    return new Date( value ).toLocaleString();
+}
+declare module 'dayjs' {
+    interface Dayjs {
+        fromNow (): string;
+    }
+}
+export function formatRelativeTime ( value: string ): string {
+    return dayjs( value ).fromNow();
 }
 
 export const formatDateOptions: Intl.DateTimeFormatOptions = {

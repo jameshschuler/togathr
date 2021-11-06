@@ -14,6 +14,7 @@
     </nav>
 </template>
 <script lang="ts">
+import { isNullOrUndefined } from '../utils/common';
 import { defineComponent, ref, watch } from 'vue';
 import { store } from '../store';
 import NavDropdown from './NavDropdown.vue';
@@ -26,7 +27,7 @@ export default defineComponent({
         watch(
             () => store.user,
             (value, prevValue) => {
-                isLoggedIn.value = value !== null;
+                isLoggedIn.value = !isNullOrUndefined(value);
             }
         );
 
