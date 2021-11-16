@@ -1,7 +1,7 @@
 import { supabase } from '../supabase';
 import { createProfile } from './profileService';
 
-export async function signUpWithEmailPassword ( email: string, password: string ): Promise<Error | null> {
+export async function signUpWithEmailPassword ( email: string, password: string, firstName?: string, lastName?: string ): Promise<Error | null> {
     // TODO: move to env variable
     let redirectTo = import.meta.env.DEV ? 'http://localhost:3000/emailConfirmed' :
         'https://www.togathr.app/emailConfirmed'
@@ -11,9 +11,13 @@ export async function signUpWithEmailPassword ( email: string, password: string 
 
     if ( !error && user ) {
         const defaultAvatarUrl = import.meta.env.VITE_DEFAULT_AVATAR_URL as string;
+
         await createProfile( {
             userId: user!.id,
-            avatarUrl: defaultAvatarUrl
+            avatarUrl: defaultAvatarUrl,
+            firstName,
+            lastName,
+            fullName: firstName !== '' && lastName !== '' ? `${firstName} ${lastName}` : ''
         } );
     }
 
@@ -24,6 +28,8 @@ export async function signInWithGoogle (): Promise<any> {
     const { user, session, error } = await supabase.auth.signIn( {
         provider: 'google'
     } );
+
+    // TODO: need to create profile record here somehow
 
     return {
         error,

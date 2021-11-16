@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import NotFound from "../components/NotFound.vue";
-import { store } from '../store';
+import { supabase } from '../supabase';
 import ConfirmationEmailSent from "../views/ConfirmationEmailSent.vue";
 import EventDetail from '../views/events/EventDetail.vue';
 import Events from "../views/events/Events.vue";
@@ -34,7 +34,8 @@ const routes: Array<RouteRecordRaw> = [
         name: "Feed",
         component: Feed,
         meta: {
-            requiresAuth: true
+            requiresAuth: true,
+            title: 'Feed'
         }
     },
     {
@@ -55,7 +56,8 @@ const routes: Array<RouteRecordRaw> = [
         name: "Events",
         component: Events,
         meta: {
-            requiresAuth: true
+            requiresAuth: true,
+            title: 'Events'
         }
     },
     {
@@ -71,7 +73,8 @@ const routes: Array<RouteRecordRaw> = [
         name: "EventDetail",
         component: EventDetail,
         meta: {
-            requiresAuth: true
+            requiresAuth: true,
+            title: ''
         }
     },
     {
@@ -101,14 +104,21 @@ const router = createRouter( {
     routes
 } );
 
+// Change document titles
+router.beforeEach( ( to, from, next ) => {
+    document.title = `${to.meta.title} | Togathr`;
+    next();
+} );
+
 router.beforeEach( ( to, from, next ) => {
     const requiresAuth = to.matched.some( record => record.meta.requiresAuth );
-    if ( requiresAuth && store.user?.id === undefined ) {
+    const user = supabase.auth.user();
+
+    if ( requiresAuth && user === null ) {
         next( { name: 'Login' } );
     }
     else {
-        // TODO: after logging in, the route is being updated before the store user is set
-        if ( store.user?.id && ( to.name === 'Landing' || to.name === 'Login' || to.name === 'SignUp' ) ) {
+        if ( user?.id && ( to.name === 'Landing' || to.name === 'Login' || to.name === 'SignUp' ) ) {
             next( { name: 'Feed' } );
         } else {
             next();

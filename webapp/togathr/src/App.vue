@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { store } from './store';
+import store from './store';
 import { defineComponent, watch, ref, onMounted } from 'vue';
 import AppFooter from './components/AppFooter.vue';
 import BottomActionbar from './components/BottomActionbar.vue';
@@ -35,15 +35,12 @@ export default defineComponent({
     setup() {
         const isLoggedIn = ref(false);
 
-        // TODO: maybe move this to before the comp is mounted?
         onMounted(() => {
             const user = supabase.auth.user();
             if (user) {
-                store.user = {
-                    ...user,
-                };
+                store.methods.setUser({ ...user });
             } else {
-                store.user = null;
+                store.methods.setUser(null);
             }
         });
 
@@ -53,15 +50,15 @@ export default defineComponent({
             if (user) {
                 const response = await getProfile(user.id);
 
-                store.profile = response.payload ?? null;
-                store.user = user;
+                store.methods.setProfile(response.payload ?? null);
+                store.methods.setUser(user);
             } else {
-                store.user = null;
+                store.methods.setUser(null);
             }
         });
 
         watch(
-            () => store.user,
+            () => store.state.user,
             (value, prevValue) => {
                 isLoggedIn.value = !isNullOrUndefined(value);
             }

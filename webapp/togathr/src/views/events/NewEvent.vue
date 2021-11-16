@@ -181,7 +181,7 @@ import { defineComponent, ref } from 'vue';
 import { NewEvent, NewEventErrors, newEventFormValidator } from '../../models/event';
 import { createEvent, isEventNameUnique } from '../../services/eventService';
 import { getCountryOptions, getSelectTimeOptions, getStateOptions } from '../../services/dataService';
-import { store } from '../../store';
+import store from '../../store';
 import { ValidationError } from 'yup';
 import { useRouter } from 'vue-router';
 import Notification from '../../components/Notification.vue';
@@ -217,7 +217,7 @@ export default defineComponent({
 
                 await newEventFormValidator.validate(formData.value, { abortEarly: false });
 
-                const isUnique = await isEventNameUnique(store.user!.id, formData.value.name);
+                const isUnique = await isEventNameUnique(store.state.user!.id, formData.value.name);
                 if (!isUnique) {
                     loading.value = false;
                     errors.value = {
@@ -227,7 +227,7 @@ export default defineComponent({
                 }
 
                 const response = await createEvent({
-                    createdBy: store.user!.id,
+                    createdBy: store.state.user!.id,
                     description: formData.value.description,
                     endDate: formData.value.endDate,
                     endTime: formData.value.endTime,

@@ -36,7 +36,7 @@ import { useRoute } from 'vue-router';
 import { NewPost, NewPostErrors } from '../../models/formModels/post';
 import { newPostFormValidator } from '../../models/validators/postValidators';
 import { createPost } from '../../services/postService';
-import { store } from '../../store';
+import store from '../../store';
 import { handleValidationErrors } from '../../utils/validation';
 
 export default defineComponent({
@@ -46,6 +46,8 @@ export default defineComponent({
         const loading = ref(false);
         const route = useRoute();
 
+        console.log(store.state.profile);
+
         async function onSubmit() {
             loading.value = true;
 
@@ -54,17 +56,17 @@ export default defineComponent({
 
                 const response = await createPost({
                     content: formData.value.content,
-                    createdBy: store.user!.id,
+                    createdBy: store.state.user!.id,
                     eventId: Number(route.params.id),
-                    profileId: store.profile!.id,
+                    profileId: store.state.profile!.id,
                 });
 
                 if (response.error) {
                     // TODO: show toaster
                 } else {
                     const { content, id, createdAt, createdBy, profileId } = response.payload;
-                    const { avatarUrl, fullName } = store.profile!;
-                    store.currentEvent!.posts!.unshift({
+                    const { avatarUrl, fullName } = store.state.profile!;
+                    store.state.currentEvent!.posts!.unshift({
                         content,
                         id,
                         createdAt,
@@ -87,7 +89,7 @@ export default defineComponent({
         }
 
         return {
-            avatarUrl: store.profile!.avatarUrl,
+            avatarUrl: store.state.profile!.avatarUrl,
             errors,
             formData,
             loading,

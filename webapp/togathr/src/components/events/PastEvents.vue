@@ -16,7 +16,7 @@
 import { defineComponent, ref } from 'vue';
 import { Event } from '../../models/event';
 import { getPastEvents } from '../../services/eventService';
-import { store } from '../../store';
+import store from '../../store';
 import EventCard from './EventCard.vue';
 import Notification from '../Notification.vue';
 import LoadingIndicator from '../LoadingIndicator.vue';
@@ -33,7 +33,7 @@ export default defineComponent({
 
         async function loadPastEvents() {
             loading.value = true;
-            const response = await getPastEvents(store.user!.id);
+            const response = await getPastEvents(store.state.user!.id);
 
             if (response.error) {
                 // Pop a toast or something

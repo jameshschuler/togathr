@@ -18,7 +18,7 @@ import { getTopLevelPosts } from '../../services/postService';
 import Notification from '../Notification.vue';
 import Post from './Post.vue';
 import { Post as EventPost } from '../../models/state/post';
-import { store } from '../../store';
+import store from '../../store';
 
 export default defineComponent({
     components: { Notification, Post },
@@ -32,10 +32,10 @@ export default defineComponent({
             if (response.error) {
                 console.log(response.error);
             } else {
-                if (store.currentEvent?.posts) {
-                    store.currentEvent.posts = response.payload;
+                if (store.state.currentEvent?.posts) {
+                    store.state.currentEvent.posts = response.payload;
                 }
-                posts.value = store.currentEvent?.posts ?? [];
+                posts.value = store.state.currentEvent?.posts ?? [];
             }
         }
 

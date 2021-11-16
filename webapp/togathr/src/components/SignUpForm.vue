@@ -23,6 +23,20 @@
         </div>
 
         <div class="field mb-4">
+            <label for="firstName" class="label">First Name</label>
+            <div class="control">
+                <input class="input" type="text" id="firstName" v-model="formData.firstName" />
+            </div>
+        </div>
+
+        <div class="field mb-4">
+            <label for="lastName" class="label">Last Name</label>
+            <div class="control">
+                <input class="input" type="text" id="lastName" v-model="formData.lastName" />
+            </div>
+        </div>
+
+        <div class="field mb-4">
             <label for="password" class="label">Password</label>
             <div class="control has-icons-left has-icons-right">
                 <input
@@ -79,7 +93,12 @@ export default defineComponent({
             try {
                 const { email, password } = await signupFormValidator.validate(formData.value);
 
-                const error = await signUpWithEmailPassword(email, password);
+                const error = await signUpWithEmailPassword(
+                    email,
+                    password,
+                    formData.value.firstName,
+                    formData.value.lastName
+                );
                 if (error) {
                     validationError.value = error.message;
                 } else {

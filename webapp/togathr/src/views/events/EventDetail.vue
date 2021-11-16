@@ -15,12 +15,20 @@
         </div>
         <div class="content mt-4">
             <p>{{ eventDetail.description }}</p>
-            <p><b>Where</b></p>
-            <p>{{ eventDetail.locationName }} - {{ eventDetail.address1 }} {{ eventDetail.address2 }}</p>
-            <p>{{ eventDetail.city }}, {{ eventDetail.state }} {{ eventDetail.zip }}</p>
-            <p><b>Start</b> {{ eventDetail.startDate }} @ {{ eventDetail.startTime }}</p>
-            <p><b>End</b> {{ eventDetail.endDate }} @ {{ eventDetail.endTime }}</p>
         </div>
+        <div class="is-flex is-justify-content-space-between">
+            <div class="content w-50">
+                <p><b>Where</b></p>
+                <p>{{ eventDetail.locationName }} - {{ eventDetail.address1 }} {{ eventDetail.address2 }}</p>
+                <p>{{ eventDetail.city }}, {{ eventDetail.state }} {{ eventDetail.zip }}</p>
+            </div>
+            <div class="content w-50">
+                <p><b>When</b></p>
+                <p><b>Start</b> {{ eventDetail.startDate }} @ {{ eventDetail.startTime }}</p>
+                <p><b>End</b> {{ eventDetail.endDate }} @ {{ eventDetail.endTime }}</p>
+            </div>
+        </div>
+
         <hr />
         <recent-posts />
         <new-post />
@@ -34,7 +42,7 @@ import LoadingIndicator from '../../components/LoadingIndicator.vue';
 import RecentPosts from '../../components/posts/RecentPosts.vue';
 import { EventDetail } from '../../models/event';
 import { getEventDetail } from '../../services/eventService';
-import { store } from '../../store';
+import store from '../../store';
 import { formatDate, formatTime } from '../../utils/formatter';
 import NewPost from '../../components/posts/NewPost.vue';
 
@@ -59,7 +67,7 @@ export default defineComponent({
                 // TODO: show error and redirect to 404 page?
                 // either event doesn't exist or they don't have access to event
                 console.log('redirecting to 404 page');
-                store.currentEvent = null;
+                store.state.currentEvent = null;
                 router.push({ path: '/notfound' });
             } else {
                 eventDetail.value = data;
@@ -76,7 +84,7 @@ export default defineComponent({
                 eventDetail.value.startDate = formatDate(startDate);
                 eventDetail.value.startTime = formatTime(startTime);
 
-                store.currentEvent = {
+                store.state.currentEvent = {
                     eventId,
                     posts: [],
                 };
@@ -85,7 +93,7 @@ export default defineComponent({
             loading.value = false;
         }
 
-        loadEventDetail(Number(route.params.id), store.user!.id);
+        loadEventDetail(Number(route.params.id), store.state.user!.id);
 
         return {
             eventDetail,

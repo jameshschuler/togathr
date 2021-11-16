@@ -37,14 +37,14 @@
 import { defineComponent, ref } from 'vue';
 import { deletePost } from '../../services/postService';
 import { formatDateAndTime, formatRelativeTime } from '../../utils/formatter';
-import { store } from '../../store';
+import store from '../../store';
 import { Post } from '../../models/state/post';
 
 export default defineComponent({
     props: ['post'],
     setup(props) {
         const createdAt = ref<string>(formatRelativeTime(props.post.createdAt));
-        const isOwner = ref<boolean>(props.post.createdBy === store.user?.id);
+        const isOwner = ref<boolean>(props.post.createdBy === store.state.user?.id);
 
         async function handleDeletePost(postId: number) {
             const { error, objectId } = await deletePost(postId);
@@ -52,10 +52,10 @@ export default defineComponent({
             if (error) {
                 // TODO:
             } else {
-                const posts = store.currentEvent!.posts!;
+                const posts = store.state.currentEvent!.posts!;
                 const postToDelete = posts.find((p: Post) => p.id === objectId);
                 if (postToDelete) {
-                    store.currentEvent!.posts!.splice(posts.indexOf(postToDelete), 1);
+                    store.state.currentEvent!.posts!.splice(posts.indexOf(postToDelete), 1);
                 } else {
                     // TODO:
                 }

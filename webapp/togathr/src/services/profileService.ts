@@ -32,9 +32,12 @@ export async function updateProfile ( request: UpdateProfileRequest ): Promise<A
 }
 
 export async function createProfile ( request: CreateProfileRequest ): Promise<APIResponse> {
-    const { avatarUrl, userId } = request;
+    const { avatarUrl, userId, firstName, lastName, fullName } = request;
     const { data, error } = await supabase.from( PROFILES ).insert( {
         avatar_url: avatarUrl,
+        first_name: firstName,
+        last_name: lastName,
+        full_name: fullName,
         user_id: userId,
     }, { returning: 'representation' } ).single();
 
